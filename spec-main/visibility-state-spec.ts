@@ -5,7 +5,7 @@ import * as path from 'path';
 
 import { emittedOnce } from './events-helpers';
 import { closeWindow } from './window-helpers';
-import { ifdescribe, delay } from './spec-helpers';
+import { ifdescribe } from './spec-helpers';
 
 // visibilityState specs pass on linux with a real window manager but on CI
 // the environment does not let these specs pass
@@ -66,12 +66,9 @@ ifdescribe(process.platform !== 'linux')('document.visibilityState', () => {
   itWithOptions('should be hidden when the window is initially shown but hidden before the page is loaded', {
     show: true
   }, async () => {
-    // TODO(MarshallOfSound): Figure out if we can work around this 1 tick issue for users
-    if (process.platform === 'darwin') {
-      // Wait for a tick, the window being "shown" takes 1 tick on macOS
-      await delay(0);
-    }
+    const windowHidden = emittedOnce(w, 'hide');
     w.hide();
+    await windowHidden;
     load();
     const [, state] = await emittedOnce(ipcMain, 'initial-visibility-state');
     expect(state).to.equal('hidden');
