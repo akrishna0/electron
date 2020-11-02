@@ -32,14 +32,6 @@ ifdescribe(process.platform !== 'linux')('document.visibilityState', () => {
     });
   };
 
-  itWithOptions('should be hidden when the window is initially hidden', {
-    show: false
-  }, async () => {
-    load();
-    const [, state] = await emittedOnce(ipcMain, 'initial-visibility-state');
-    expect(state).to.equal('hidden');
-  });
-
   itWithOptions('should be visible when the window is initially shown by default', {}, async () => {
     load();
     const [, state] = await emittedOnce(ipcMain, 'initial-visibility-state');
@@ -52,6 +44,14 @@ ifdescribe(process.platform !== 'linux')('document.visibilityState', () => {
     load();
     const [, state] = await emittedOnce(ipcMain, 'initial-visibility-state');
     expect(state).to.equal('visible');
+  });
+
+  itWithOptions('should be hidden when the window is initially hidden', {
+    show: false
+  }, async () => {
+    load();
+    const [, state] = await emittedOnce(ipcMain, 'initial-visibility-state');
+    expect(state).to.equal('hidden');
   });
 
   itWithOptions('should be visible when the window is initially hidden but shown before the page is loaded', {
