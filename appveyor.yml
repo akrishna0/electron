@@ -66,10 +66,9 @@ build_script:
   - update_depot_tools.bat
   - ps: Move-Item $env:APPVEYOR_BUILD_FOLDER -Destination src\electron
   - ps: $env:CHROMIUM_BUILDTOOLS_PATH="$pwd\src\buildtools"
-  - ps: >-
-      $env:SCCACHE_PATH="$pwd\src\electron\external_binaries\sccache.exe"
-      $env:SCCACHE_ERROR_LOG=$pwd\src\sccache_log.txt
-      $env:SCCACHE_LOG=debug
+  - ps: $env:SCCACHE_PATH="$pwd\src\electron\external_binaries\sccache.exe"
+  - ps: $env:SCCACHE_ERROR_LOG="$pwd\src\sccache_log.txt"
+  - ps: $env:SCCACHE_LOG="debug"
   - ps: >-
       if ($env:GN_CONFIG -eq 'release') {
         $env:GCLIENT_EXTRA_ARGS="$env:GCLIENT_EXTRA_ARGS --custom-var=checkout_requests=True"
